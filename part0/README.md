@@ -1,7 +1,10 @@
 ```mermaid
 sequenceDiagram
+    participant student
     participant browser
     participant server
+
+    student->>browser: Input new note name and press enter
 
     browser->>server: GET https://studies.cs.helsinki.fi/exampleapp/notes
     activate server
