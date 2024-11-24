@@ -6,25 +6,30 @@ const Button = (props) => (
 
 const DisplayHead = ({ text }) => <h2>{text}</h2>;
 
-const RateScore = (props) => (
-  <div>
-    {props.text} {props.value}
-  </div>
+const StatisticLine = (props) => (
+  <tr>
+    <td>{props.text}</td>
+    <td>{props.value}</td>
+  </tr>
 );
 
-const FeedBackStats = (props) => {
+const Statistics = (props) => {
   if (props.stats.all == 0) {
     return <div>No feedback given</div>;
   } else {
     return (
-      <>
-        <RateScore text="good" value={props.stats.good} />
-        <RateScore text="neutral" value={props.stats.neutral} />
-        <RateScore text="bad" value={props.stats.bad} />
-        <RateScore text="all" value={props.stats.all} />
-        <RateScore text="average" value={props.other.average} />
-        <RateScore text="positive" value={props.other.positive} />
-      </>
+      <div>
+        <table>
+          <tbody>
+            <StatisticLine text="good" value={props.stats.good} />
+            <StatisticLine text="neutral" value={props.stats.neutral} />
+            <StatisticLine text="bad" value={props.stats.bad} />
+            <StatisticLine text="all" value={props.stats.all} />
+            <StatisticLine text="average" value={props.other.average} />
+            <StatisticLine text="positive" value={props.other.positive} />
+          </tbody>
+        </table>
+      </div>
     );
   }
 };
@@ -46,8 +51,8 @@ const App = () => {
     const updatedGood = stats.good + 1;
     const updatedAll = stats.all + 1;
     setOther({
-      average: (updatedGood - stats.bad) / updatedAll,
-      positive: (updatedGood / updatedAll) * 100,
+      average: ((updatedGood - stats.bad) / updatedAll).toFixed(1),
+      positive: ((updatedGood / updatedAll) * 100).toFixed(1) + " %",
     });
     setStats({ ...stats, good: updatedGood, all: updatedAll });
   };
@@ -60,8 +65,8 @@ const App = () => {
     const updatedBad = stats.bad + 1;
     const updatedAll = stats.all + 1;
     setOther({
-      average: (stats.good - updatedBad) / updatedAll,
-      positive: (stats.good / updatedAll) * 100,
+      average: ((stats.good - updatedBad) / updatedAll).toFixed(1),
+      positive: ((stats.good / updatedAll) * 100).toFixed(1) + " %",
     });
     setStats({ ...stats, bad: updatedBad, all: updatedAll });
   };
@@ -75,7 +80,7 @@ const App = () => {
       <Button setValue={handleBadRate} text="bad" />
 
       <DisplayHead text="statistics" />
-      <FeedBackStats stats={stats} other={other} />
+      <Statistics stats={stats} other={other} />
     </div>
   );
 };
