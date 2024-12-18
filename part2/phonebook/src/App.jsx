@@ -1,12 +1,22 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Filter from "./components/Filter";
 import PersonForm from "./components/PersonForm";
 import Persons from "./components/Persons";
+import axios from "axios";
 
 const App = () => {
   const [persons, setPersons] = useState([]);
   const [newData, setPersonData] = useState({ name: "", number: "" });
   const [newSearch, setSearch] = useState("");
+
+  const hook = () => {
+    axios.get("http://localhost:3001/persons").then((resp) => {
+      console.log(resp.data);
+      setPersons(resp.data);
+    });
+  };
+
+  useEffect(hook, []);
 
   const handleDataChangeName = (e) => {
     setPersonData({ ...newData, name: e.target.value });
@@ -37,14 +47,12 @@ const App = () => {
     setPersonData({ name: "", number: "" });
   };
 
-  const Header = ({ title }) => <h2>{title}</h2>;
-
   return (
     <div>
-      <Header title="Phonebook" />
+      <h2>Phonebook</h2>
       <Filter search={newSearch} method={handleSearchChange} />
 
-      <Header title="Add a new" />
+      <h3>Add a new</h3>
       <PersonForm
         data={newData}
         addPerson={addNewPersons}
@@ -54,7 +62,7 @@ const App = () => {
         }}
       />
 
-      <Header title="Numbers" />
+      <h3>Numbers</h3>
       <Persons data={personsToShow} />
     </div>
   );
